@@ -6,16 +6,12 @@ Creating a Cyber Security Web Scrapper using a Raspberry Pi board. Raspberry Pi 
 The Pi is running a script for scrapping information from reddit and other cyber security news website. It saves the results to OpenSearch and publishes everything to Grafana.
 
 **Arhitecture**:
-┌─────────────┐      ┌────────────┐       ┌──────────────┐
-│ RSS Fetcher │ ──▶  │ Summarizer │ ────▶ │ Grafana Dash│
-└─────────────┘      └────────────┘       └──────────────┘
-       ▲                     │
-       │                     ▼
-[Feed List+ Reddit feeds]    HuggingFace(t5-small)
+
+[RSS Feeder] + [Reddit feeder] -> [Summarizer (HuggingFace t5-small model)] -> [Grafana Dashboard]
 
 **Tech stack**
 - Python: - packages: transformers, praw, feedparser, yaml, os, opensearchpy
-- Docker: elasticSeach and Grafana services
+- Docker: - elasticSeach and Grafana services
 - CronTab - job scheduler for automatic scrapping
 - JSON - for Dashboard
 
