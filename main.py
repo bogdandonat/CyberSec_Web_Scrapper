@@ -1,9 +1,11 @@
 from fetcher import DataFetcher
 from summarizer import DataSummarizer
 from opensearchpy import OpenSearch
+from datetime import datetime
+#import test_api
 
 class MainApp:
-    def __init__(self, sources_file, opensearch_host='localhost', opensearch_port=9200, index_name='cybersecurity'):
+    def __init__(self, sources_file, opensearch_host='piservervpn.tplinkdns.com', opensearch_port=9200, index_name='cybersecurity'):
         self.fetcher = DataFetcher(sources_file)
         self.summarizer = DataSummarizer()
         self.client = OpenSearch(hosts=[{'host': opensearch_host, 'port': opensearch_port}])
@@ -11,8 +13,16 @@ class MainApp:
 
     def save_to_opensearch(self, data):
         for article in data:
-            response = self.client.index(index=self.index_name, body=article)
-            print(f"Document ID: {response['_id']} saved to OpenSearch.")
+            existing_article = self.client.search(index=self.index_name, body = {
+                "query":{"match_phrase": {"title": article['title']}} 
+            })
+            if existing_article['hits']['total']['value'] == 0:
+                article["@timestamp"] = datetime.utcnow().isoformat()
+                response = self.client.index(index=self.index_name, body=article)
+                print(f"Document ID: {response['_id']} saved to OpenSearch.")
+            else:
+                print(f"Document with ID {article['link']} already exists")
+                
 
     def run(self):
         print("Fetching data...")
@@ -28,3 +38,5 @@ class MainApp:
 if __name__ == "__main__":
     app = MainApp(sources_file='sources.yaml')
     app.run()
+    
+    
