@@ -1,0 +1,57 @@
+{
+    "dashboard": {
+      "id": null,
+      "title": "Cybersecurity Articles Overview",
+      "timezone": "browser",
+      "schemaVersion": 37,
+      "version": 1,
+      "refresh": "5s",
+      "panels": [
+        {
+          "type": "timeseries",
+          "title": "Articles Over Time",
+          "gridPos": {
+            "h": 9,
+            "w": 24,
+            "x": 0,
+            "y": 0
+          },
+          "datasource": {
+            "type": "your_data_source",
+            "uid": "your_uid"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "custom": {}
+            },
+            "overrides": []
+          },
+          "targets": [
+            {
+              "refId": "A",
+              "queryType": "lucene",
+              "query": "*",
+              "metrics": [
+                {
+                  "id": "1",
+                  "type": "count"
+                }
+              ],
+              "bucketAggs": [
+                {
+                  "id": "2",
+                  "type": "date_histogram",
+                  "field": "@timestamp",
+                  "settings": {
+                    "interval": "auto"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "overwrite": false
+  }
+  
